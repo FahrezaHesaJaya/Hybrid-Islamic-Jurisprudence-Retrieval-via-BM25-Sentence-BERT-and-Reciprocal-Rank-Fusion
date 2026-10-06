@@ -124,7 +124,7 @@ except Exception as e:
 # =============================================================
 # HERO SECTION
 # =============================================================
-hero_b64 = get_hero_image_b64()
+hero_b64 = get_hero_image_b64(HERO_IMG_PATH)
 banner_img_html = f"""<div class="hero-banner-frame"><img src="data:image/jpeg;base64,{hero_b64}" class="hero-banner-image" alt="Quranica Banner" /></div>""" if hero_b64 else ""
 
 render_html(f"""

@@ -17,12 +17,16 @@ def render_html(html_str: str):
     st.markdown(clean_html, unsafe_allow_html=True)
 
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_HERO_PATH = os.path.join(BASE_DIR, "assets", "quranica_hero.jpg")
+
 @st.cache_data(show_spinner=False)
 def get_hero_image_b64(hero_img_path: str = ""):
     """Loads and caches hero banner image as base64 string."""
-    if hero_img_path and os.path.exists(hero_img_path):
+    target_path = hero_img_path if hero_img_path else DEFAULT_HERO_PATH
+    if target_path and os.path.exists(target_path):
         try:
-            with open(hero_img_path, "rb") as f:
+            with open(target_path, "rb") as f:
                 return base64.b64encode(f.read()).decode("utf-8")
         except Exception:
             pass
