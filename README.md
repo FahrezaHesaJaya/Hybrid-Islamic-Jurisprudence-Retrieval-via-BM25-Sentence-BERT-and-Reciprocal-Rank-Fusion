@@ -5,11 +5,11 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Academic Thesis & Scientific Publication Repository**  
+> **Scientific Research & Publication Repository**  
 > **Title:** *Relevance Optimization in Everyday Islamic Jurisprudence Retrieval Using a Hybrid Retrieval Architecture Based on Sentence-BERT and Okapi BM25*  
-> **Author:** Fahreza Hesa Jaya (Student ID: 220170117)  
+> **Author & Lead Researcher:** Fahreza Hesa Jaya  
 > **Affiliation:** Department of Informatics, Faculty of Engineering, Universitas Malikussaleh, Indonesia  
-> **Advisors:** Safwandi, S.T., M.Kom & Nunsina, S.T., M.Kom  
+> **Advisors & Co-Authors:** Safwandi, S.T., M.Kom & Nunsina, S.T., M.Kom  
 > **Target Journal:** *Jurnal Informatika Mulawarman (JIM)* — Nationally Accredited SINTA 3  
 
 ---
@@ -178,8 +178,7 @@ If you utilize this repository, codebase, or dataset in your academic research, 
 ## 👨‍💻 Author & Contact
 
 **Fahreza Hesa Jaya**  
-Student ID: 220170117  
 Department of Informatics, Faculty of Engineering, Universitas Malikussaleh  
 Email: [fahrezzahesajaya@gmail.com](mailto:fahrezzahesajaya@gmail.com)  
-Website: [https://github.com/FahrezaHesaJaya](https://github.com/FahrezaHesaJaya)  
+GitHub: [https://github.com/FahrezaHesaJaya](https://github.com/FahrezaHesaJaya)  
 License: [MIT License](LICENSE)

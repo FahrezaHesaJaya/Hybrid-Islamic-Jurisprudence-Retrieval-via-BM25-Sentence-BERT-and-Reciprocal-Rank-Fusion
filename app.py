@@ -2455,12 +2455,12 @@ if "hasil_hybrid" in st.session_state and st.session_state["hasil_hybrid"]:
         </div>
         """, height=55)
 
-    # ── Live Benchmark Komparasi 3 Model (Khusus Pengujian / Semhas) ──
+    # ── Live Benchmark Komparasi 3 Model (Model Comparative Analysis) ──
     bm_res_list = st.session_state.get("hasil_bm25_only", [])
     sb_res_list = st.session_state.get("hasil_sbert_only", [])
     hy_res_list = st.session_state.get("hasil_hybrid", [])
 
-    with st.expander("🔬 Mode Komparasi 3 Model (Live Benchmark Sidang Semhas)", expanded=False):
+    with st.expander("🔬 Mode Komparasi 3 Model (Live Model Comparative Analysis)", expanded=False):
         render_html("""
         <div style="background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 1rem;">
             <div style="font-weight: 800; color: #1E293B; font-size: 0.95rem; margin-bottom: 0.25rem;">
