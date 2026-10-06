@@ -131,7 +131,11 @@ Open your browser at `http://localhost:8501`.
 ## 📂 Repository Structure
 
 ```text
-├── app.py                             # Main Streamlit Application & Search Engine Core
+├── app.py                             # Main Streamlit Application Controller & UI Orchestration
+├── retrieval.py                       # Information Retrieval Core (BM25, S-BERT, Intent Expansion, RRF)
+├── classifier.py                      # Context-Aware Fiqh Legal Status Classifier & Executive Synthesis
+├── ui_styles.py                       # Custom Islamic Theme Design System & CSS Styling
+├── utils.py                           # Utilities (Prayer Times API, Search Logger, Trivia & Recommendations)
 ├── requirements.txt                   # Production Python Dependencies
 ├── .streamlit/
 │   └── config.toml                    # Clean Google-Style Theme Configurations
