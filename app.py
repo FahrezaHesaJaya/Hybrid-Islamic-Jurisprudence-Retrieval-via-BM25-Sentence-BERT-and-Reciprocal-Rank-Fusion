@@ -1114,6 +1114,9 @@ SINONIM_FIQIH = {
     "tayammum":    ["tayamum", "debu", "tanpa air", "rukun tayamum", "tanah"],
     "debu":        ["tayamum", "tayammum", "tanah suci"],
     "najis":       ["kotoran", "hadats", "mughallazhah", "mutawassithah", "mukhaffafah"],
+    "mimisan":     ["darah", "darah keluar", "najis darah", "batal wudhu"],
+    "darah":       ["darah keluar", "luka berdarah", "mimisan", "najis"],
+    "luka":        ["darah mengalir", "najis darah", "perban"],
     "hadas":       ["hadats", "hadas kecil", "hadas besar", "junub"],
     "hadats":      ["hadas", "junub"],
     "junub":       ["mandi wajib", "mandi besar", "hadas besar"],
@@ -1408,6 +1411,8 @@ INTENT_EXPANSION = [
     (r"\b(air\s+teh|air\s+kopi|air\s+sirup|air\s+kelapa|air\s+berwarna|air\s+sabun)\b", "air yang berubah warna karena benda lain air teh muqayyad macam macam air untuk bersuci"),
     (r"\b(cebok|istinja|tisu)\b", "buang air kecil dan wudhu buang air besar dan wudhu istinja bersuci"),
     (r"\b(donor\s+darah|darah|bekam|luka\s+berdarah|mimisan).*wudhu\b|\bwudhu.*(donor\s+darah|darah|bekam|luka\s+berdarah|mimisan)\b", "darah keluar setelah wudhu donor darah membatalkan wudhu thaharah bersuci"),
+    (r"\b(mimisan|darah|luka\s+berdarah).*sh[ao]lat\b|\bsh[ao]lat.*(mimisan|darah|luka\s+berdarah)\b", "darah keluar ketika shalat batal wudhu ketika shalat pakaian terkena darah najis darah"),
+    (r"\b(mimisan|hidung\s+berdarah)\b", "darah keluar setelah wudhu membatalkan wudhu pakaian terkena darah najis darah"),
     (r"\b(baju|pakaian).*(najis|ompol|kencing).*sh[ao]lat\b|\bsh[ao]lat.*(baju|pakaian).*(najis|ompol|kencing)\b", "shalat ketika pakaian terkena najis pakaian terkena najis sah batal shalat"),
 ]
 
@@ -1588,7 +1593,7 @@ CATEGORY_KEYWORDS = {
         "wudhu", "wudlu", "wudu", "bersuci", "tayamum", "tayammum", "hadats", "hadas",
         "najis", "istinja", "junub", "janabah", "mani", "sperma", "mandi", "haid", "nifas",
         "sentuh", "bersentuhan", "kulit", "batal", "cebok", "khuf", "istihadlah", "istihadhah",
-        "madzi", "wadi", "darah", "kencing", "kotoran", "air", "debu"
+        "madzi", "wadi", "darah", "mimisan", "luka", "bekam", "kencing", "kotoran", "air", "debu"
     ],
     "SHALAT": [
         "shalat", "sholat", "salat", "sembahyang", "rakaat", "sujud", "ruku", "masbuk",
