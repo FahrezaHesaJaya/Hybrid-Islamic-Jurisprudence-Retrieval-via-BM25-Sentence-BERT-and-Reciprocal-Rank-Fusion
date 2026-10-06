@@ -1,0 +1,21 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary & agent directories
+.agents/
+.system_generated/
+scratch/
+.tmp/
+
+# Backup files
+*backup*.csv
+*backup*.py
+
+# Search logs
+log_pencarian.csv
+log_feedback.csv
+
+# Large detail benchmark files (keep summary hasil_*.csv)
+detail_evaluasi_*.csv
