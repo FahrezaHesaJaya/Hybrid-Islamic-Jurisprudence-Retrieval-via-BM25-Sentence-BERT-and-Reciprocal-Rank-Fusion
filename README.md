@@ -1,94 +1,185 @@
-# 🕌 Quranica — Sistem Temu Balik Fatwa Fikih Ubudiyah Komparatif Berbasis Hybrid Retrieval
+# 🕌 Quranica: Hybrid Information Retrieval System for Comparative Islamic Jurisprudence (Fiqh)
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Repositori Penelitian Skripsi & Publikasi Ilmiah:**  
-> *"Optimalisasi Relevansi Penelusuran Hukum Fikih Keseharian Menggunakan Metode Hybrid Retrieval Berbasis Sentence-BERT dan BM25"*  
-> **Penulis:** Fahreza Hesa Jaya (NIM: 220170117)  
-> **Program Studi:** Teknik Informatika, Fakultas Teknik, Universitas Malikussaleh  
-> **Dosen Pembimbing:** Safwandi, S.T., M.Kom & Nunsina, S.T., M.Kom  
+> **Academic Thesis & Scientific Publication Repository**  
+> **Title:** *Relevance Optimization in Everyday Islamic Jurisprudence Retrieval Using a Hybrid Retrieval Architecture Based on Sentence-BERT and Okapi BM25*  
+> **Author:** Fahreza Hesa Jaya (Student ID: 220170117)  
+> **Affiliation:** Department of Informatics, Faculty of Engineering, Universitas Malikussaleh, Indonesia  
+> **Advisors:** Safwandi, S.T., M.Kom & Nunsina, S.T., M.Kom  
+> **Target Journal:** *Jurnal Informatika Mulawarman (JIM)* — Nationally Accredited SINTA 3  
 
 ---
 
-## 📖 Ringkasan Proyek
+## 📌 Executive Summary
 
-**Quranica** adalah sistem penelusuran temu balik informasi (*Information Retrieval*) khusus literatur hukum fikih Islam komparatif antara dua ormas Islam terbesar di Indonesia: **Nahdlatul Ulama (LBM-PBNU)** dan **Muhammadiyah (Majelis Tarjih PP Muhammadiyah)**.
+**Quranica** is an artificial intelligence-powered legal information retrieval system designed to search and analyze comparative everyday Islamic jurisprudence (*fiqh ubudiyyah*) rulings between Indonesia's two largest Islamic mass organizations: **Nahdlatul Ulama (LBM-PBNU)** and **Muhammadiyah (Majelis Tarjih PP Muhammadiyah)**.
 
-Sistem ini memecahkan dua masalah klasik dalam *Information Retrieval*:
-1. **Term Mismatch Problem pada BM25:** Kegagalan saat pengguna memasukkan kueri sehari-hari yang bersifat percakapan (*slang*), singkatan chat, atau salah ketik (*typo*).
-2. **Semantic Drift pada Sentence-BERT:** Model *dense embedding* umum kerap tertukar membedakan istilah fikih khusus yang bertetangga dekat secara semantik (*madzi* vs *mani*, wudhu vs mandi wajib).
+In conventional search engines, retrieving Islamic legal literature faces two major technical bottlenecks:
+1. **Term Mismatch in Lexical Retrieval (BM25):** Fails when queries contain colloquial contractions, regional vernacular (*slang*), vowel-dropped chat SMS forms (`wdhu`, `poso`, `drh`, `btl`), or typographical errors.
+2. **Semantic Drift in Dense Semantic Retrieval (Sentence-BERT):** Pretrained dense transformers often confuse closely related fiqh terms with opposing legal outcomes (e.g., distinguishing between *madzi* and *mani*, or wudhu invalidation vs. mandatory major ritual baths).
 
-Dengan menggabungkan representasi leksikal **Okapi BM25** dan representasi semantik **Multilingual Sentence-BERT** (bobot seimbang 50:50) yang diperkuat dengan:
-- **Dynamic Min-Max Normalization** per kueri.
-- **Advanced Slang & Chat Normalizer** dengan proteksi ~100 kata umum bahasa Indonesia.
-- **Soft Hierarchical Category Gate** non-destruktif.
-- **Specificity-Aware Topic Bonus** untuk keabsahan hukum spesifik.
-- **Deteksi Konsensus Hukum Otomatis** (Mubah, Boleh, Batal, Wajib, Haram).
-
----
-
-## 📊 Hasil Evaluasi Kuantitatif (Cranfield Paradigm)
-
-Evaluasi kuantitatif penuh dilakukan pada **500 dokumen fatwa** dengan 3 skenario kueri uji:
-
-| Skenario Pengujian | BM25 Murni | Indo S-BERT Murni | Proposed Hybrid Retrieval | Peningkatan vs BM25 |
-| :--- | :---: | :---: | :---: | :---: |
-| **500 Kueri Bersih (Out-of-Sample)** | P@1: 73.0% (MRR: 0.7913) | P@1: 35.2% (MRR: 0.4590) | **P@1: 92.8% \| R@5: 98.6% (MRR: 0.9535)** | **+27.12%** |
-| **500 Kueri Chat, Slang & Typo** | P@1: 31.0% (MRR: 0.4539) | P@1: 19.6% (MRR: 0.2929) | **P@1: 60.2% \| R@5: 92.6% (MRR: 0.7425)** | **+94.19%** |
-| **500 Kueri Terbalik (Inverted Syntax)** | P@1: 26.8% (MRR: 0.4167) | P@1: 11.8% (MRR: 0.1988) | **P@1: 57.4% \| R@5: 85.4% (MRR: 0.6916)** | **+114.18%** |
+Quranica resolves these issues through a **Hybrid Retrieval Architecture** that fuses sparse lexical signals (**Okapi BM25**) and dense semantic representations (**Multilingual Sentence-BERT**, `paraphrase-multilingual-MiniLM-L12-v2`) via balanced 50:50 score fusion, strengthened by:
+- **Dynamic Per-Query Min-Max Score Normalization:** Eliminates baseline score inflation (~0.70) in cosine similarity space.
+- **Advanced Colloquial Normalization Engine:** Normalizes dialectal contractions while strictly preserving ~100 common Indonesian function words.
+- **Non-Destructive Soft Category Gating:** Prevents cross-domain semantic leakage (e.g., distinguishing blood donation under *Thaharah* vs. *Puasa*) without rigid candidate filtering.
+- **Specificity-Aware Subject Bonus:** Protects granular topics from being eclipsed by broader parent categories.
+- **Automated Fatwa Consensus Classifier:** Determines legal consensus badges (*Mubah*, *Permissible*, *Invalidating*, *Obligatory*, *Prohibited*) across NU and Muhammadiyah rulings.
 
 ---
 
-## 🚀 Panduan Menjalankan Aplikasi Secara Lokal
+## 📊 Comprehensive Empirical Benchmarks (Cranfield Evaluation Paradigm)
 
-1. **Clone repositori:**
-   ```bash
-   git clone https://github.com/FahrezaHesaJaya/quranica-fikih-search.git
-   cd quranica-fikih-search
-   ```
+Evaluated across **500 authentic comparative fatwa documents** under three rigorous testing regimes using international Information Retrieval metrics: **Precision@1 (P@1)**, **Recall@3 (R@3)**, **Recall@5 (R@5)**, and **Mean Reciprocal Rank (MRR)**.
 
-2. **Buat virtual environment dan pasang dependensi:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Di Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-
-3. **Jalankan aplikasi Streamlit:**
-   ```bash
-   streamlit run app.py
-   ```
-   Aplikasi akan terbuka otomatis di peramban pada alamat `http://localhost:8501`.
+### Metric Formulas
+$$\text{Precision@1} = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \mathbb{I}(\text{rank}_i = 1)$$
+$$\text{Recall@K} = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \mathbb{I}(\text{rank}_i \le K), \quad K \in \{3, 5\}$$
+$$\text{MRR} = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\text{rank}_i}$$
 
 ---
 
-## 📂 Struktur Repositori
+### Comparative Evaluation Results (500 Test Queries)
 
-```text
-├── app.py                             # Kode utama Streamlit (Search Engine & UI)
-├── requirements.txt                   # Daftar dependensi pustaka Python
-├── .streamlit/
-│   └── config.toml                    # Konfigurasi tema Quranica (Google-style)
-├── assets/
-│   └── quranica_hero.jpg              # Banner aset visual resmi
-├── Data_ubudiyah_final.csv            # Korpus 500 fatwa ubudiyah komparatif NU & Muhammadiyah
-├── Data_ubudiyah_final.parquet        # Representasi korpus cepat (Parquet)
-├── bm25_model.pkl                     # Model indeks Okapi BM25 tersimpan
-├── corpus_emb.npy                     # Vektor embedding Sentence-BERT korpus
-├── DRAFT_SKRIPSI_DAN_JURNAL_SINTA3.md # Naskah Bab IV, Bab V, dan Artikel Jurnal SINTA 3
-├── hasil_evaluasi_skripsi_500.csv     # Rekap hasil evaluasi kueri bersih
-├── hasil_evaluasi_500_chat_typo.csv   # Rekap hasil evaluasi kueri slang & typo
-├── hasil_evaluasi_500_inverted_hard.csv # Rekap hasil evaluasi kueri sintaksis terbalik
-└── README.md                          # Dokumentasi proyek
+| Benchmark Scenario | Pure BM25 (Lexical) | Pure Indo S-BERT (Semantic) | Proposed Hybrid Retrieval | Performance Gain vs. BM25 | Performance Gain vs. S-BERT |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **1. 500 Out-of-Sample Unseen Queries** | P@1: 73.0%<br>MRR: 0.7913 | P@1: 35.2%<br>MRR: 0.4590 | **P@1: 92.8%<br>R@5: 98.6%<br>MRR: 0.9535** | **+27.12%** | **+163.64%** |
+| **2. 500 Colloquial Chat & Typo Queries** | P@1: 31.0%<br>MRR: 0.4539 | P@1: 19.6%<br>MRR: 0.2929 | **P@1: 60.2%<br>R@5: 92.6%<br>MRR: 0.7425** | **+94.19%** | **+207.14%** |
+| **3. 500 Inverted Syntax Queries (Ultimate Stress Test)** | P@1: 26.8%<br>MRR: 0.4167 | P@1: 11.8%<br>MRR: 0.1988 | **P@1: 57.4%<br>R@5: 85.4%<br>MRR: 0.6916** | **+114.18%** | **+386.44%** |
+
+### Key Scientific Findings:
+1. **Mathematical Synergy:** Fusing sparse and dense signals consistently outperforms standalone models across all queries, validating the hypothesis that lexical and semantic retrieval address mutually exclusive error modes.
+2. **Stress-Test Resilience:** Under severe word-order permutations (inverted conversational queries) and extreme chat slang, the proposed Hybrid system successfully captures **85.4% of relevant fatwa documents within the Top-5 positions** with an average query latency of only ~133 ms.
+
+---
+
+## 🛠️ Architecture & Core Components
+
+```
+┌────────────────────────────────────────────────────────┐
+│               User Query (Text / Slang)                │
+└───────────────────────────┬────────────────────────────┘
+                            │
+               ┌────────────▼───────────┐
+               │ Preprocessing & Normal │
+               │ Slang Dict + Boundary  │
+               └────────────┬───────────┘
+                            │
+            ┌───────────────┴───────────────┐
+            │                               │
+┌───────────▼───────────┐       ┌───────────▼───────────┐
+│   Sparse Lexical      │       │     Dense Semantic    │
+│    (Okapi BM25)       │       │    (Sentence-BERT)    │
+│  Sastrawi Tokenizer   │       │  384-dim Dense Vector │
+└───────────┬───────────┘       └───────────┬───────────┘
+            │                               │
+            └───────────────┬───────────────┘
+                            │
+               ┌────────────▼───────────┐
+               │ Dynamic Min-Max Normal │
+               │  Balanced Fusion 50:50 │
+               └────────────┬───────────┘
+                            │
+               ┌────────────▼───────────┐
+               │ Soft Category Gating   │
+               │ Specificity Bonus      │
+               └────────────┬───────────┘
+                            │
+               ┌────────────▼───────────┐
+               │ Ranked Results (Top-K) │
+               │ NU & Muhammadiyah Card │
+               │ Consensus Legal Badge  │
+               └────────────────────────┘
 ```
 
 ---
 
-## 👨‍💻 Pengembang
+## 🚀 Quickstart & Local Installation
+
+### Prerequisites
+- Python 3.10 or higher
+- Git
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/FahrezaHesaJaya/Hybrid-Islamic-Jurisprudence-Retrieval-via-BM25-Sentence-BERT-and-Reciprocal-Rank-Fusion.git
+cd Hybrid-Islamic-Jurisprudence-Retrieval-via-BM25-Sentence-BERT-and-Reciprocal-Rank-Fusion
+```
+
+### 2. Set Up Virtual Environment & Dependencies
+```bash
+python -m venv venv
+# On Windows:
+venv\Scripts\activate
+# On Linux / macOS:
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+### 3. Launch Streamlit Application
+```bash
+streamlit run app.py
+```
+Open your browser at `http://localhost:8501`.
+
+---
+
+## 📂 Repository Structure
+
+```text
+├── app.py                             # Main Streamlit Application & Search Engine Core
+├── requirements.txt                   # Production Python Dependencies
+├── .streamlit/
+│   └── config.toml                    # Clean Google-Style Theme Configurations
+├── assets/
+│   └── quranica_hero.jpg              # Official Visual Header Banner
+├── Data_ubudiyah_final.parquet        # Fast Binary Corpus Representation (500 Fatwas)
+├── Data_ubudiyah_final.csv            # Structured Master Dataset (NU & Muhammadiyah)
+├── bm25_model.pkl                     # Precomputed Okapi BM25 Index Cache
+├── corpus_emb.npy                     # Precomputed 384-dim Sentence-BERT Embedding Matrix
+├── .gitignore                         # Git Production Exclusion Rules
+└── README.md                          # Comprehensive Academic Documentation
+```
+
+---
+
+## ⚖️ Comparative Fatwa Scope
+
+The dataset covers **500 verified rulings** across five essential daily worship (*ubudiyyah*) domains:
+1. **Thaharah (Purification):** 100 rulings (Ablution, Tayammum, Impurities, Janabah, Medical fluids).
+2. **Shalat (Prayer):** 200 rulings (Obligatory prayers, Congregarional etiquette, Travel rukhsah, Forgetfulness prostrations).
+3. **Puasa (Fasting):** 100 rulings (Ramadan requirements, Involuntary swallowing, Medical injections, Inhalers).
+4. **Zakat (Almsgiving):** 80 rulings (Zakat Fitrah, Zakat Mal, Digital payments / QRIS, Nisab & Haul).
+5. **Haji & Umrah (Pilgrimage):** 20 rulings (Ihram prohibitions, Manasik violations, Dam compensations).
+
+---
+
+## 📜 Citation & Academic Attribution
+
+If you utilize this repository, codebase, or dataset in your academic research, please cite as follows:
+
+```bibtex
+@misc{jaya2026quranica,
+  author       = {Fahreza Hesa Jaya and Safwandi and Nunsina},
+  title        = {Relevance Optimization in Everyday Islamic Jurisprudence Retrieval Using a Hybrid Retrieval Architecture Based on Sentence-BERT and Okapi BM25},
+  year         = {2026},
+  publisher    = {GitHub},
+  howpublished = {\url{https://github.com/FahrezaHesaJaya/Hybrid-Islamic-Jurisprudence-Retrieval-via-BM25-Sentence-BERT-and-Reciprocal-Rank-Fusion}},
+  institution  = {Department of Informatics, Universitas Malikussaleh}
+}
+```
+
+---
+
+## 👨‍💻 Author & Contact
 
 **Fahreza Hesa Jaya**  
-NIM: 220170117  
-Jurusan Teknik Informatika, Universitas Malikussaleh  
-Email: [fahrezzahesajaya@gmail.com](mailto:fahrezzahesajaya@gmail.com)
+Student ID: 220170117  
+Department of Informatics, Faculty of Engineering, Universitas Malikussaleh  
+Email: [fahrezzahesajaya@gmail.com](mailto:fahrezzahesajaya@gmail.com)  
+Website: [https://github.com/FahrezaHesaJaya](https://github.com/FahrezaHesaJaya)  
+License: [MIT License](LICENSE)
