@@ -895,11 +895,17 @@ color: #334155;
 }
 
 .badge-hukum {
-display: inline-block;
-font-size: 0.68rem;
+display: inline-flex;
+align-items: center;
+gap: 0.3rem;
+font-size: 0.72rem;
 font-weight: 800;
-border-radius: 20px;
-padding: 0.15rem 0.6rem;
+letter-spacing: 0.02em;
+border-radius: 9999px;
+padding: 0.2rem 0.65rem;
+box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+vertical-align: middle;
+line-height: 1.2;
 }
 
 mark.hl {

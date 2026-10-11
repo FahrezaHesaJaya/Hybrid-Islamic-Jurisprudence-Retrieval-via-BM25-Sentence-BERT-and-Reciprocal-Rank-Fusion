@@ -14,56 +14,56 @@ def deteksi_hukum(text):
     Returns: (label_badge, warna_hex, kategori_singkat)
     """
     if not text or not isinstance(text, str):
-        return "ℹ️ Mubah / Boleh", "#22c55e", "Boleh / Sah"
+        return "✅ Boleh / Sah", "#16a34a", "Boleh / Sah"
 
     t = text.lower()
 
-    # 1. Negasi pembatal (contoh: "tidak membatalkan wudhu/puasa", "bukan pembatal") -> Boleh/Sah
+    # 1. Negasi pembatal (contoh: "tidak membatalkan wudhu/puasa", "bukan pembatal") -> Boleh / Sah
     if re.search(r"\b(tidak|bukan)\s+(membatalkan|merusak|menggugurkan)\b", t):
         if re.search(r"\b(wajib|fardhu)\b", t[:250]):
-            return "☑️ Wajib", "#10b981", "Wajib"
-        return "✅ Boleh / Sah", "#22c55e", "Boleh / Sah"
+            return "☑️ Wajib / Fardhu", "#0d9488", "Wajib"
+        return "✅ Boleh / Sah", "#16a34a", "Boleh / Sah"
 
     # 2. Negasi keabsahan / Batal (contoh: "tidak sah", "tidak boleh", "batal")
     if re.search(r"\b(tidak|bukan)\s+(sah|boleh|diperbolehkan|dibenarkan)\b", t) or re.search(r"\b(batal|membatalkan)\b", t[:350]):
-        return "❌ Tidak Sah / Batal", "#ef4444", "Tidak Sah / Batal"
+        return "❌ Batal / Tidak Sah", "#dc2626", "Batal / Tidak Sah"
 
     # 3. Larangan mutlak / Haram (pastikan tidak ada negasi "tidak haram")
     if re.search(r"\b(haram|diharamkan|terlarang)\b", t):
         if not re.search(r"\b(tidak|bukan)\s+(haram|diharamkan)\b", t):
-            return "🚫 Haram", "#dc2626", "Haram"
+            return "🚫 Haram", "#991b1b", "Haram"
 
     # 4. Keringanan syariat (Rukhshah) -> Boleh
     if re.search(r"\b(rukhshah|kemudahan|keringanan)\b", t[:350]):
-        return "✅ Boleh (Rukhshah)", "#14b8a6", "Boleh (Rukhshah)"
+        return "🕌 Boleh (Rukhshah)", "#0891b2", "Rukhshah"
 
     # 5. Kewajiban (Wajib / Fardhu / Rukun)
     if re.search(r"\b(wajib|fardhu|harus|kewajiban|rukun)\b", t[:350]):
         if not re.search(r"\b(tidak|bukan)\s+(wajib|fardhu|harus)\b", t[:350]):
-            return "☑️ Wajib", "#10b981", "Wajib"
+            return "☑️ Wajib / Fardhu", "#0d9488", "Wajib"
 
     # 6. Anjuran (Sunnah / Mustahab)
     if re.search(r"\b(sunnah|mustahab|dianjurkan|afdhal|keutamaan)\b", t[:350]):
         if not re.search(r"\b(tidak|bukan)\s+(sunnah|dianjurkan)\b", t[:350]):
-            return "✨ Sunnah", "#3b82f6", "Sunnah"
+            return "✨ Sunnah", "#2563eb", "Sunnah"
 
     # 7. Makruh
     if re.search(r"\b(makruh|dimakruhkan|kurang disukai)\b", t[:350]):
         if not re.search(r"\b(tidak|bukan)\s+(makruh|dimakruhkan)\b", t[:350]):
-            return "⚠️ Makruh", "#f59e0b", "Makruh"
+            return "⚠️ Makruh", "#d97706", "Makruh"
 
     # 8. Mubah / Sah / Boleh
     if re.search(r"\b(boleh|diperbolehkan|sah|mubah|halal)\b", t[:350]):
-        return "✅ Boleh / Sah", "#22c55e", "Boleh / Sah"
+        return "✅ Boleh / Sah", "#16a34a", "Boleh / Sah"
 
     # Fallback scanning
-    if re.search(r"\b(wajib|fardhu)\b", t): return "☑️ Wajib", "#10b981", "Wajib"
-    if re.search(r"\bsunnah\b", t): return "✨ Sunnah", "#3b82f6", "Sunnah"
-    if re.search(r"\b(boleh|sah|mubah)\b", t): return "✅ Boleh", "#22c55e", "Boleh / Sah"
-    if re.search(r"\bmakruh\b", t): return "⚠️ Makruh", "#f59e0b", "Makruh"
-    if re.search(r"\b(haram)\b", t): return "🚫 Haram", "#dc2626", "Haram"
+    if re.search(r"\b(wajib|fardhu)\b", t): return "☑️ Wajib / Fardhu", "#0d9488", "Wajib"
+    if re.search(r"\bsunnah\b", t): return "✨ Sunnah", "#2563eb", "Sunnah"
+    if re.search(r"\b(boleh|sah|mubah)\b", t): return "✅ Boleh / Sah", "#16a34a", "Boleh / Sah"
+    if re.search(r"\bmakruh\b", t): return "⚠️ Makruh", "#d97706", "Makruh"
+    if re.search(r"\b(haram)\b", t): return "🚫 Haram", "#991b1b", "Haram"
 
-    return "ℹ️ Mubah / Boleh", "#22c55e", "Boleh / Sah"
+    return "✅ Boleh / Sah", "#16a34a", "Boleh / Sah"
 
 
 def ringkasan_konsensus_hukum(label_nu, cat_nu, label_mu, cat_mu):
