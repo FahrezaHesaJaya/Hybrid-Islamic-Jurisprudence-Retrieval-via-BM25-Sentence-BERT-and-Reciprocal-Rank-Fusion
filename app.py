@@ -87,7 +87,8 @@ bulan_id = BULAN_ID[_now.month]
 today_str = f"{hari_id}, {_now.day} {bulan_id} {_now.year}"
 
 prayer_chips_html = ""
-for p_name, p_time in prayer_times.items():
+for p_name in ["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya"]:
+    p_time = prayer_times.get(p_name, "--:--")
     is_act = (p_name == next_prayer)
     act_cls = "active" if is_act else ""
     ico = prayer_icons.get(p_name, "🕌")
@@ -99,7 +100,7 @@ render_html(f"""
   <div class="prayer-cards-group">
     {prayer_chips_html}
   </div>
-  <div class="prayer-loc-date">📍 Lhokseumawe &nbsp;·&nbsp; {today_str}</div>
+  <div class="prayer-loc-date">📍 Kota Lhokseumawe &nbsp;·&nbsp; {today_str} &nbsp;·&nbsp; <span style="opacity:0.85;">Kemenag RI</span></div>
 </div>
 """)
 

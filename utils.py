@@ -14,36 +14,82 @@ BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LOG_SEARCH   = os.path.join(BASE_DIR, "log_pencarian.csv")
 LOG_FEEDBACK = os.path.join(BASE_DIR, "log_feedback.csv")
 
+def clean_time_str(val, default_val: str) -> str:
+    """Membersihkan format jam agar selalu HH:MM murni tanpa embel-embel timezone."""
+    if not val:
+        return default_val
+    m = re.search(r"(\d{1,2}):(\d{2})", str(val))
+    if m:
+        return f"{int(m.group(1)):02d}:{m.group(2)}"
+    return default_val
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
 def fetch_prayer_times(city="Lhokseumawe", country="ID"):
-    """Fetches real prayer times from Aladhan API or returns defaults."""
+    """
+    Multi-Tier Bulletproof Prayer Times Fetcher:
+    Tier 1: MyQuran API (Kemenag RI Bimas Islam - Kota Lhokseumawe '0121')
+    Tier 2: Aladhan API (Koordinat Lhokseumawe 5.1801 N, 97.1407 E + Method 20 Kemenag)
+    Tier 3: Offline Baseline Andal (Lhokseumawe / Aceh)
+    """
+    today = datetime.now()
+
+    # 1. Tier 1: Kemenag RI via MyQuran API (Paling Akurat untuk Indonesia)
     try:
-        today = datetime.now()
-        url = (f"https://api.aladhan.com/v1/timingsByCity/{today.day}-{today.month}-{today.year}"
-               f"?city={city}&country={country}&method=11")
-        r = requests.get(url, timeout=5)
+        url_myquran = f"https://api.myquran.com/v2/sholat/jadwal/0121/{today.year}/{today.month:02d}/{today.day:02d}"
+        r = requests.get(url_myquran, timeout=2.5)
         if r.status_code == 200:
-            t = r.json()["data"]["timings"]
+            res = r.json()
+            if res.get("status") and "jadwal" in res.get("data", {}):
+                j = res["data"]["jadwal"]
+                return {
+                    "Subuh":   clean_time_str(j.get("subuh"),   "05:02"),
+                    "Dzuhur":  clean_time_str(j.get("dzuhur"),  "12:21"),
+                    "Ashar":   clean_time_str(j.get("ashar"),   "15:37"),
+                    "Maghrib": clean_time_str(j.get("maghrib"), "18:22"),
+                    "Isya":    clean_time_str(j.get("isya"),    "19:30"),
+                }
+    except Exception:
+        pass
+
+    # 2. Tier 2: Aladhan API (Koordinat Lhokseumawe Method 20 Kemenag)
+    try:
+        url_aladhan = (f"https://api.aladhan.com/v1/timings/{today.day}-{today.month}-{today.year}"
+                       f"?latitude=5.1801&longitude=97.1407&method=20")
+        r = requests.get(url_aladhan, timeout=2.5)
+        if r.status_code == 200:
+            t = r.json().get("data", {}).get("timings", {})
             return {
-                "Subuh":   t.get("Fajr",    "05:12"),
-                "Dzuhur":  t.get("Dhuhr",   "12:24"),
-                "Ashar":   t.get("Asr",     "15:36"),
-                "Maghrib": t.get("Maghrib", "18:21"),
-                "Isya":    t.get("Isha",    "19:33"),
+                "Subuh":   clean_time_str(t.get("Fajr"),    "05:00"),
+                "Dzuhur":  clean_time_str(t.get("Dhuhr"),   "12:18"),
+                "Ashar":   clean_time_str(t.get("Asr"),     "15:36"),
+                "Maghrib": clean_time_str(t.get("Maghrib"), "18:19"),
+                "Isya":    clean_time_str(t.get("Isha"),    "19:28"),
             }
     except Exception:
         pass
-    return {"Subuh": "05:12", "Dzuhur": "12:24", "Ashar": "15:36", "Maghrib": "18:21", "Isya": "19:33"}
+
+    # 3. Tier 3: Offline Baseline Andal (Lhokseumawe)
+    return {
+        "Subuh":   "05:02",
+        "Dzuhur":  "12:21",
+        "Ashar":   "15:37",
+        "Maghrib": "18:22",
+        "Isya":    "19:30",
+    }
 
 
 def get_next_prayer(times):
-    now_min = datetime.now().hour * 60 + datetime.now().minute
+    now = datetime.now()
+    now_min = now.hour * 60 + now.minute
     for name in ["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya"]:
-        try:
-            h, m = map(int, times[name].split(":"))
-            if now_min < h * 60 + m:
+        t_str = times.get(name, "")
+        m = re.search(r"(\d{1,2}):(\d{2})", str(t_str))
+        if m:
+            h = int(m.group(1))
+            mn = int(m.group(2))
+            if now_min < h * 60 + mn:
                 return name
-        except Exception:
-            pass
     return "Subuh"
 
 
